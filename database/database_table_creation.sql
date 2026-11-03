@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS usuarios(
 
 CREATE TABLE IF NOT EXISTS reservatorios(
 	id_res INT PRIMARY KEY AUTO_INCREMENT,
+	id_usuario INT,
 	nome VARCHAR(100) NOT NULL,
 	capacidade DECIMAL(15,3) NOT NULL,
 	localizacao VARCHAR(255) NOT NULL,
@@ -24,6 +25,7 @@ CREATE TABLE IF NOT EXISTS reservatorios(
 
 CREATE TABLE IF NOT EXISTS setores(
 	id_setor INT PRIMARY KEY AUTO_INCREMENT,
+	id_res INT,
 	nome VARCHAR(100) NOT NULL,
 	consumo_max_dia DECIMAL(15,2) NOT NULL,
 	status ENUM('Ativo', 'Inativo') DEFAULT 'Ativo' NOT NULL,
@@ -33,6 +35,8 @@ CREATE TABLE IF NOT EXISTS setores(
 
 CREATE TABLE IF NOT EXISTS medidores(
 	id_med INT PRIMARY KEY AUTO_INCREMENT,
+	id_res INT,
+	id_setor INT,
 	num_serie VARCHAR(50) UNIQUE NOT NULL,
 	tipo ENUM('Nível','Vazão','Hidrômetro') NOT NULL,
 	origem ENUM('Real', 'Simulado') DEFAULT 'Real' NOT NULL,
@@ -42,6 +46,9 @@ CREATE TABLE IF NOT EXISTS medidores(
 
 CREATE TABLE IF NOT EXISTS responsaveis(
 	id_resp INT PRIMARY KEY AUTO_INCREMENT,
+	id_usuario INT,
+	id_res INT,
+	id_setor INT,
 	nome VARCHAR(100) NOT NULL,
 	funcao VARCHAR(50) NOT NULL,
 	telefone VARCHAR(20) NOT NULL,
@@ -53,6 +60,7 @@ CREATE TABLE IF NOT EXISTS responsaveis(
 
 CREATE TABLE IF NOT EXISTS leituras(
 	id_leitura INT PRIMARY KEY AUTO_INCREMENT,
+	id_med INT,
 	volume_leitura DECIMAL(15,3) NOT NULL,
 	momento_leitura DATETIME NOT NULL,
 	origem ENUM('Manual', 'Importada', 'Simulada') NOT NULL,
@@ -61,6 +69,8 @@ CREATE TABLE IF NOT EXISTS leituras(
 
 CREATE TABLE IF NOT EXISTS ocorrencias(
 	id_oc INT PRIMARY KEY AUTO_INCREMENT,
+	id_res INT,
+	id_setor INT,
 	descricao TEXT NOT NULL,
 	momento_abertura DATETIME NOT NULL,
 	volume_perdido DECIMAL(15,2) NOT NULL,
@@ -73,6 +83,7 @@ CREATE TABLE IF NOT EXISTS ocorrencias(
 
 CREATE TABLE IF NOT EXISTS reunioes(
 	id_reuniao INT PRIMARY KEY AUTO_INCREMENT,
+	id_usuario INT,
 	momento_abertura DATETIME NOT NULL,
 	pauta VARCHAR(255) NOT NULL,
 	resumo TEXT NOT NULL,

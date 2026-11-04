@@ -21,15 +21,15 @@ function authenticateReqResNextForAdmin(){
 	authorizeAdmin(req, rest, next);
 }
 
-
 reservoirRouter.get('/', reservoirController.list);
 reservoirRouter.get('/:id', reservoirController.searchById);
 reservoirRouter.post('/', (req, res, next) => authenticateReqResNext(), reservoirController.create)
 reservoirRouter.put(':/id', (req, res, next) => authenticateReqResNext(), reservoirController.update)
 reservoirRouter.delete('/:id', (req, res, next) => authenticateReqResNext(), (req, res, next) => authenticateReqResNext(true), reservoirController.delete)
 
-export function configReservoirSecurity{
-	
+export function configReservoirSecurity(middlewareAuth, middlewareAdmin){
+	if (middlewareAuth) authenticate = middlewareAuth;
+	if (middlewareAdmin) authorizeAdmin = middlewareAdmin;
 }
 
 

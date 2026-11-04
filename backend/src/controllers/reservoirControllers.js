@@ -1,5 +1,23 @@
 import * as reservoirService from '../service/reservoirService.js';
 
+export async function list(req, res, next){
+	try{
+		return attemptToReturnDataAndPaginationAndSuccess(req);
+	}
+	catch(error){
+		return returnError(error, res, next)
+	}
+}
+
+function attemptToReturnDataAndPaginationAndSuccess(req){
+	const result = await reservoirService.list(req.query);
+	return res.status(200).json({
+		sucess: true,
+		data: result.reservoirs,
+		pagination: result.pagination
+	)}
+}
+
 function returnError(error, res, next){
 	resAndError = []
 	if (error instanceof TypeError || error.message.includes('not found'){
@@ -29,21 +47,39 @@ function returnResStatus400(resAndError){
 	return res.status(400).json({ success: false, error: error.message });
 }
 
-export async function list(req, res, next){
+export async function searchById(req, res, next){
 	try{
-		return attemptToReturnDataAndPaginationAndSuccess(req);
+		reqAndRes = [];
+		reqAndRes.push(req, res);
+		searchByIdQueryRequestAttempt(reqAndRes);
 	}
-	catch(error){
-		return returnError(error, res, next)
+	catch{
+		return returnError(error, res, next);
 	}
 }
 
-function attemptToReturnDataAndPaginationAndSuccess(req){
-	const result = await reservoirService.list(req.query);
-	return res.status(200).json({
-		sucess: true,
-		data: result.reservoirs,
-		pagination: result.pagination
-	)}
+async function searchByIdQueryRequestAttempt(reqAndRes){
+	const req = reqAndRes[0];
+	const res = reqAndRes[1];
+	const reservoir = await reservoirService.searchById(req.params.id);
+	return res.status(200).json({ success: true, data: reservoir });
 }
 
+export async function create(req, res, next){
+	try{
+		reqAndRes = [];
+		reqAndRes.push(req, res);
+		createNewProductAttempt(reqAndRes);
+	}
+	catch{
+		returnError(error, res, next);
+	}
+
+}
+
+async function createNewProductAttempt(reqAndRes){
+	const req = reqAndRes[0];
+	const res = reqAndRes[1];
+	const reservoir = await reservoirService.update(req.params.id, req.body);
+	return re
+}

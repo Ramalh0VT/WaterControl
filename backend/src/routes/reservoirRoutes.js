@@ -7,15 +7,30 @@ let authorizeAdmin = (_req, _res, next) => next();
 
 export const reservoirRouter = express.router();
 
-function authorizeAdminAfterInitialVerification(){
-	authorizeAdmin(req, res, next)
+function authenticateReqResNext(isAdmin){
+	if (isAdmin){
+		authenticateReqResNextForAdmin();
+		return;
+	}
+	else{
+		authenticate(req, res, next);
+	}
 }
+
+function authenticateReqResNextForAdmin(){
+	authorizeAdmin(req, rest, next);
+}
+
 
 reservoirRouter.get('/', reservoirController.list);
 reservoirRouter.get('/:id', reservoirController.searchById);
-reservoirRouter.post('/', (req, res, next) => authenticate(req, res, next), reservoirController.create)
-reservoirRouter.put(':/id', (req, res, next) => authenticate(req, res, next), reservoirController.update)
-reservoirRouter.delete('/:id', (req, res, next) => authenticate(req, res, next), (req, res, next) => authorizeAdmin(req, res, next), reservoirController.delete)
+reservoirRouter.post('/', (req, res, next) => authenticateReqResNext(), reservoirController.create)
+reservoirRouter.put(':/id', (req, res, next) => authenticateReqResNext(), reservoirController.update)
+reservoirRouter.delete('/:id', (req, res, next) => authenticateReqResNext(), (req, res, next) => authenticateReqResNext(true), reservoirController.delete)
+
+export function configReservoirSecurity{
+	
+}
 
 
 

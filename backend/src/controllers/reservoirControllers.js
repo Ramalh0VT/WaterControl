@@ -69,7 +69,7 @@ export async function create(req, res, next){
 	try{
 		reqAndRes = [];
 		reqAndRes.push(req, res);
-		createNewProductAttempt(reqAndRes);
+		createNewReservoirAttempt(reqAndRes);
 	}
 	catch{
 		returnError(error, res, next);
@@ -77,9 +77,25 @@ export async function create(req, res, next){
 
 }
 
-async function createNewProductAttempt(reqAndRes){
+async function createNewReservoirAttempt(reqAndRes){
 	const req = reqAndRes[0];
 	const res = reqAndRes[1];
 	const reservoir = await reservoirService.update(req.params.id, req.body);
-	return re
+	return res.status(201).json({ success: true, data: reservoir })
+}
+
+export async function update(req, res, next){
+	try{
+		
+	}
+	catch{
+
+	}
+}
+
+async function attemptToDeleteReservoir(reqAndRes){
+	const req = reqAndRes[0];
+	const res = reqAndRes[1];
+	await reservoirService.delete(req.params.id);
+	return res.status(204).send();
 }

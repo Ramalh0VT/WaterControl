@@ -8,10 +8,11 @@ const jwtSecret = process.env.JWT_SECRET || 'default-development-key';
 export async function register(userData){
 	userData = cleanPossiblyUncleanNames(userData);
 	doMultipleVerificationsBeforeRegister(userData);
-	const passwordHash = generatePasswordHash(userData[2]);
+	createUser(userData);
 }
 
-async function cleanPossiblyUncleanNames(userData){
+async function cleanPossiblyUncleanNames(userData, specificFieldToClean){
+	if (!specificFieldToclean){
 	userData[0] = typeof userData[0] === 'string' ? userData[0].trim() : '';
 	userData[1] = typeof userData[1] === 'string' ? userData[1].trim().toLowerCase() : '';
 	userData[3] cleanedCnpj = typeof userData[3] === 'string' ? userData[3].trim() : '';
@@ -45,7 +46,20 @@ async function doMultipleVerificationsBeforeRegister(userData){
 	}
 }
 
-generatePasswordHash(userPassword){
-	const passwordHash = await bcrypt.hash(userPassword, 10);
+async function createUser(userData){
+	const passwordHash = await bcrypt.hash(userData[2], 10);
+	return await userModel.create({
+		name: userData[0],
+		email: userData[1],
+		passwordHash,
+		cnpj: userData[3],
+		phoneNumber: userData[4],
+		category: userData[5],
+		theme: userData[6],
+		status = userData[7]
+	})
+}
 
+export async function login(userEmailAndPassword){
+	
 }

@@ -8,12 +8,10 @@ function returnError(error, res, next){
 	if (error instanceof TypeError){
 		return returnError404(resAndError);
 	}
-	else if (error.message.includes('not found')){
+	if (error.message.includes('not found')){
 		return returnError400(resAndError);
 	}
-	else{
-		return next(error);
-	}
+	return next(error);
 }
 
 function returnError404(resAndError){

@@ -1,23 +1,5 @@
 import * as reservoirService from '../service/reservoirService.js';
 
-export async function list(req, res, next){
-	try{
-		return attemptToReturnDataAndPaginationAndSuccess(req);
-	}
-	catch(error){
-		return returnError(error, res, next)
-	}
-}
-
-function attemptToReturnDataAndPaginationAndSuccess(req){
-	const result = await reservoirService.list(req.query);
-	return res.status(200).json({
-		sucess: true,
-		data: result.reservoirs,
-		pagination: result.pagination
-	)}
-}
-
 function returnError(error, res, next){
 	resAndError = []
 	if (error instanceof TypeError || error.message.includes('not found'){
@@ -47,18 +29,36 @@ function returnResStatus400(resAndError){
 	return res.status(400).json({ success: false, error: error.message });
 }
 
+export async function list(req, res, next){
+	try{
+		return attemptToReturnDataAndPaginationAndSuccess(req);
+	}
+	catch(error){
+		return returnError(error, res, next)
+	}
+}
+
+function attemptToReturnDataAndPaginationAndSuccess(req){
+	const result = await reservoirService.list(req.query);
+	return res.status(200).json({
+		sucess: true,
+		data: result.reservoirs,
+		pagination: result.pagination
+	)}
+}
+
 export async function searchById(req, res, next){
 	try{
-		reqAndRes = [];
+		const reqAndRes = [];
 		reqAndRes.push(req, res);
-		searchByIdQueryRequestAttempt(reqAndRes);
+		attemptToSearchById(reqAndRes);
 	}
-	catch{
+	catch (error) {
 		return returnError(error, res, next);
 	}
 }
 
-async function searchByIdQueryRequestAttempt(reqAndRes){
+async function attemptToSearchById(reqAndRes){
 	const req = reqAndRes[0];
 	const res = reqAndRes[1];
 	const reservoir = await reservoirService.searchById(req.params.id);
@@ -67,17 +67,17 @@ async function searchByIdQueryRequestAttempt(reqAndRes){
 
 export async function create(req, res, next){
 	try{
-		reqAndRes = [];
+		const reqAndRes = [];
 		reqAndRes.push(req, res);
-		createNewReservoirAttempt(reqAndRes);
+		attemptToCreateNewReservoir(reqAndRes);
 	}
-	catch{
+	catch (error) {
 		returnError(error, res, next);
 	}
 
 }
 
-async function createNewReservoirAttempt(reqAndRes){
+async function attemptToCreateNewReservoir(reqAndRes){
 	const req = reqAndRes[0];
 	const res = reqAndRes[1];
 	const reservoir = await reservoirService.update(req.params.id, req.body);
@@ -86,10 +86,30 @@ async function createNewReservoirAttempt(reqAndRes){
 
 export async function update(req, res, next){
 	try{
-		
+		const reqAndRes = [];
+		reqAndRes.push(req, res);
+		attemptToUpdateReservoir(reqAndRes);
 	}
-	catch{
+	catch (error) {
+		returnError(error)
+	}
+}
 
+async function attempt attemptToUpdateReservoir(reqAndRes){
+	const req = reqAndRes[0];
+	const res = reqAndRes[1];
+	const reservoir = await.reservoirService.update(req.params.id, req.body);
+	return res.status(200).json({ success: true, data: reservoir });
+}
+
+export async function delete(req, res, next){
+	try{
+		reqAndRes = [];
+		reqAndRes.push(req, res);
+		attemptToDeleteReservoir(reqAndRes);
+	}
+	catch (error) {
+		returnError(error, res, next);
 	}
 }
 
@@ -99,3 +119,5 @@ async function attemptToDeleteReservoir(reqAndRes){
 	await reservoirService.delete(req.params.id);
 	return res.status(204).send();
 }
+
+export

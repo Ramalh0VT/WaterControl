@@ -1,29 +1,28 @@
-import * as reservoirService from '../service/reservoirService.js';
+import * as reservoirService from '../services/reservoirService.js';
 
 function returnError(error, res, next){
-	resAndError = []
+	const resAndError = [];
 	if (error instanceof TypeError || error.message.includes('not found'){
-		const resAndError = [];
 		resAndError.push(error,res);
 	}
 	if (error instanceof TypeError){
-		return returnResStatus404(resAndError);
+		return returnError404(resAndError);
 	}
 	else if (error.message.includes('not found')){
-		return returnResStatus400(resAndError);
+		return returnError400(resAndError);
 	}
 	else{
 		return next(error);
 	}
 }
 
-function returnResStatus404(resAndError){
+function returnError404(resAndError){
 	const res = resAndError[0];
 	const error = resAndError[1];
 	return res.status(400).json({ success: false, error: error.message });
 }
 
-function returnResStatus400(resAndError){
+function returnError400(resAndError){
 	const res = resAndError[0];
 	const error = resAndError[1];
 	return res.status(400).json({ success: false, error: error.message });

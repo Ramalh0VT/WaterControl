@@ -11,8 +11,7 @@ export async function register(userData){
 	createUser(userData);
 }
 
-async function cleanPossiblyUncleanNames(userData, specificFieldToClean){
-	if (!specificFieldToclean){
+async function cleanPossiblyUncleanNames(userData){
 	userData[0] = typeof userData[0] === 'string' ? userData[0].trim() : '';
 	userData[1] = typeof userData[1] === 'string' ? userData[1].trim().toLowerCase() : '';
 	userData[3] cleanedCnpj = typeof userData[3] === 'string' ? userData[3].trim() : '';
@@ -61,5 +60,55 @@ async function createUser(userData){
 }
 
 export async function login(userEmailAndPassword){
+	userEmailAndPassword[0] = cleanEmailBeforeLogin(userEmailAndPassword[0]);
+	verifyIfCredentialsAreValid(userEmailAndPassword);
+
+	const user = returnUserForTokenCreation(userEmailAndPassword[0]);
+	const token = createUserToken(user);
+
+	const userAndToken = [];
+	userAndToken.push(user, token);
+
+	return returnFinalUserInformation(userAndToken);
+}
+
+async function cleanEmailBeforeLogin(userEmail){	
+	userEmail = typeof userEmail === 'string' ? userData.trim().toLowerCase : '';
+	return userEmail;
+}
+
+async function verifyIfCredentialsAreValid(userEmailAndPassword){
+	const user = REGEX_EMAIL.test(userEmailAndPassword[0]) ? await userModel.searchByEmail(userEmailAndPassword[0]) : null;
+	const validPassword = user ? await.bcrypt.compare(userEmailAndPassword[1] || '', user.hashPassword) : false;
 	
+	if (!user || !validPassword){
+		returnError401();
+	}
+}
+
+function returnError401(){
+	const error = new Error('Credenciais inválidas');
+	error.status = 401;
+	throw error;
+}
+
+async function returnUserForTokenCreation(userEmail){
+	return REGEX_EMAIL.test(userEmail) ? await userModel.searchByEmail(userEmail);
+}
+
+function createUserToken(user){
+	return jwt.sign(
+		{ profile: user.Profile },
+		jwtSecret,
+		{ subject: String(user.id), expiresIn: '2h'}
+	);
+}
+
+function returnFinalUserInformation(userAndEmail){
+	return {
+		token,
+		type: 'Bearer',
+		expiresIn: '2h',
+		user: { id: user.id, name: user.name, profile: user.profile}
+	}
 }

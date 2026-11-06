@@ -20,6 +20,7 @@ function returnIdTypeError(){
 
 export async function list(pageAndLimit){
 	verifyIfQueryIsTooBig(pageAndLimit);
+
 }
 
 function verifyIfQueryIsTooBig(pageAndLimit){
@@ -27,6 +28,14 @@ function verifyIfQueryIsTooBig(pageAndLimit){
 	const limitNum = Number(pageAndLimit[1]);
 
 	if (!Number.isInteger(pageNum) || pageNum <= 0){
-		
+		throw new TypeError ('Página deve ser um número inteiro positivo')		
 	}
+
+	if (!Number.isInteger(limitNum) || limitNum < 1 || limitNum > 100 {
+		throw new TypeError('Limite deve ser um número entre 1 e 100')
+	}
+}
+
+async function makeListQuery(pageAndLimit){
+	const p
 }

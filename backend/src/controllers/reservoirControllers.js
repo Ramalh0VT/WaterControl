@@ -117,4 +117,3 @@ async function attemptToDeleteReservoir(reqAndRes){
 	return res.status(204).send();
 }
 
-export

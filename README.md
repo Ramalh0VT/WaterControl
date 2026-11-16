@@ -1,25 +1,17 @@
-# About this project
+# Projeto Base Full Stack
 
-A derived repository from the branches and main github repository for the software responsible for making WaterControl work. This is a group project and here is the original link to the repository:
+Template para alunos criarem forks com a mesma stack de frontend, backend e banco de dados.
 
-https://github.com/lvzangrande/projeto_integrador_3TD
+## Stack Padrao
 
-Besides that, anything below this is so the reader can be aware of the basics about how our web application works
+- Frontend: Next.js `16.2.10` com JavaScript, sem Tailwind e sem Bootstrap por padrao.
+- Backend: Node.js com Express em JavaScript.
+- Banco de dados: MySQL.
+- Deploy: Dockerfiles separados para frontend, backend e banco, facilitando criacao de servicos.
 
-# Full Stack Base Project
+## Estrutura
 
-Template for students to create forks with the same frontend, backend, and database stack.
-
-## Default Stack
-
-- **Frontend:** Next.js 16.2.10 with JavaScript, no Tailwind and no Bootstrap by default.
-- **Backend:** Node.js with Express in JavaScript.
-- **Database:** MySQL.
-- **Deployment:** Separate Dockerfiles for frontend, backend, and database, making it easy to create services.
-
-## Structure
-
-```
+```text
 .
 ├── backend/
 │   ├── src/
@@ -44,68 +36,68 @@ Template for students to create forks with the same frontend, backend, and datab
 └── docker-compose.yml
 ```
 
-## Running Locally
+## Como Rodar Localmente
 
-1. Install the dependencies:
+1. Instale as dependencias:
 
-   ```bash
-   cd backend
-   npm install
+```bash
+cd backend
+npm install
 
-   cd ../frontend
-   npm install
-   ```
+cd ../frontend
+npm install
+```
 
-2. Copy the environment files:
+2. Copie os arquivos de ambiente:
 
-   ```bash
-   cp .env.example .env
-   cp backend/.env.example backend/.env
-   cp frontend/.env.example frontend/.env.local
-   ```
+```bash
+cp .env.example .env
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env.local
+```
 
-3. Start MySQL with Docker (skip this step if you are running XAMPP or MySQL Community Server):
+3. Suba o MySQL com Docker (se for rodar com XAMPP ou MySQL Community Server, ignorar passo):
 
-   ```bash
-   docker compose up -d database
-   ```
+```bash
+docker compose up -d database
+```
 
-4. Run the backend:
+4. Rode o backend:
 
-   ```bash
-   cd backend
-   npm run dev
-   ```
+```bash
+cd backend
+npm run dev
+```
 
-5. Run the frontend:
+5. Rode o frontend:
 
-   ```bash
-   cd frontend
-   npm run dev
-   ```
+```bash
+cd frontend
+npm run dev
+```
 
-Default URLs:
+URLs padrao:
 
-- Frontend: http://localhost:3000
-- Backend: http://localhost:8080
-- API health check: http://localhost:8080/api/health
+- Frontend: `http://localhost:3000`
+- Backend: `http://localhost:8080`
+- Health check da API: `http://localhost:8080/api/health`
 - MySQL: `localhost:3306`
 
-## Running Everything with Docker Compose
+## Rodando Tudo com Docker Compose
 
 ```bash
 docker compose up --build
 ```
 
-This command starts:
+Esse comando sobe:
 
-- frontend on port 3000 by default
-- backend on port 8080 by default
-- database on port 3306 by default
+- `frontend` na porta `3000` por padrao
+- `backend` na porta `8080` por padrao
+- `database` na porta `3306` por padrao
 
-## Environment Variables
+## Variaveis de Ambiente
 
-**Root Docker Compose (`.env`):**
+Docker Compose raiz (`.env`):
 
 ```env
 FRONTEND_HOST_PORT=3000
@@ -130,7 +122,7 @@ DB_PASSWORD=app_password
 DB_NAME=app_db
 ```
 
-To run several groups on the same server, change at least the ports published on the host and the public API URL. Example for a second group:
+Para rodar varios grupos no mesmo servidor, mude pelo menos as portas publicadas no host e a URL publica da API. Exemplo para um segundo grupo:
 
 ```env
 FRONTEND_HOST_PORT=3001
@@ -140,9 +132,9 @@ FRONTEND_URL=http://localhost:3001
 NEXT_PUBLIC_API_URL=http://localhost:8081/api
 ```
 
-The internal ports can stay at their defaults (`FRONTEND_PORT=3000` and `BACKEND_PORT=8080`) in most cases. Only change the internal ports if Coolify or the chosen architecture requires it.
+As portas internas podem continuar nos defaults (`FRONTEND_PORT=3000` e `BACKEND_PORT=8080`) na maioria dos casos. Altere as portas internas apenas se o Coolify ou a arquitetura escolhida exigirem.
 
-**Backend (`backend/.env`):**
+Backend (`backend/.env`):
 
 ```env
 PORT=8080
@@ -156,38 +148,38 @@ DB_PASSWORD=app_password
 DB_NAME=app_db
 ```
 
-**Frontend (`frontend/.env.local`):**
+Frontend (`frontend/.env.local`):
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8080/api
 ```
 
-> With Docker Compose, the backend uses `DB_HOST=database`, because that is the name of the MySQL service on the Docker network.
+No Docker Compose, o backend usa `DB_HOST=database`, porque esse e o nome do servico MySQL na rede Docker.
 
 ## Backend
 
-Main scripts:
+Scripts principais:
 
 ```bash
 npm run dev
 npm start
 ```
 
-Initial routes:
+Rotas iniciais:
 
-- `GET /` returns a basic API message.
-- `GET /api/health` returns the API status and tests the MySQL connection.
+- `GET /` retorna uma mensagem basica da API.
+- `GET /api/health` retorna status da API e testa a conexao com MySQL.
 
-Default folders:
+Pastas padrao:
 
-- `src/config`: configuration and external connections.
-- `src/controllers`: functions that handle requests.
-- `src/routes`: HTTP route definitions.
-- `src/middlewares`: shared middlewares.
+- `src/config`: configuracoes e conexoes externas.
+- `src/controllers`: funcoes que tratam requisicoes.
+- `src/routes`: definicao das rotas HTTP.
+- `src/middlewares`: middlewares compartilhados.
 
 ## Frontend
 
-Main scripts:
+Scripts principais:
 
 ```bash
 npm run dev
@@ -196,42 +188,42 @@ npm start
 npm run lint
 ```
 
-The project comes without Tailwind and Bootstrap by default. Each student can install and configure the CSS library of their choice according to the project's needs.
+O projeto esta sem Tailwind e sem Bootstrap por padrao. Cada aluno pode instalar e configurar a biblioteca CSS escolhida conforme a necessidade do projeto.
 
-## Database
+## Banco de Dados
 
-The `database/init/01-schema.sql` file creates the initial database when the MySQL container starts for the first time.
+O arquivo `database/init/01-schema.sql` cria a base inicial quando o container MySQL sobe pela primeira vez.
 
-To reset the local database from scratch:
+Para reiniciar o banco local do zero:
 
 ```bash
 docker compose down -v
 docker compose up -d database
 ```
 
-## Deploying on Coolify
+## Deploy no Coolify
 
-Create separate services pointing to the Dockerfiles:
+Crie servicos separados apontando para os Dockerfiles:
 
-- **Frontend:** `frontend/Dockerfile`
-- **Backend:** `backend/Dockerfile`
-- **Database:** preferably use Coolify's managed MySQL service. If you want to use the image from this repo, use `database/Dockerfile`.
+- Frontend: `frontend/Dockerfile`
+- Backend: `backend/Dockerfile`
+- Banco: preferencialmente use o servico gerenciado de MySQL do Coolify. Se quiser usar a imagem do repo, use `database/Dockerfile`.
 
-Configure the environment variables in Coolify equivalent to those in the `.env.example` files. In the backend, `DB_HOST` must point to the internal host/name of the MySQL service in Coolify.
+Configure no Coolify as variaveis de ambiente equivalentes aos arquivos `.env.example`. No backend, `DB_HOST` deve apontar para o host/nome interno do servico MySQL no Coolify.
 
-For each group, configure different values for:
+Para cada grupo, configure valores diferentes para:
 
 - `FRONTEND_HOST_PORT`
 - `BACKEND_HOST_PORT`
-- `DATABASE_HOST_PORT`, if publishing MySQL on the host
+- `DATABASE_HOST_PORT`, se estiver publicando MySQL no host
 - `FRONTEND_URL`
 - `NEXT_PUBLIC_API_URL`
 
-When deploying with a domain/reverse proxy, `NEXT_PUBLIC_API_URL` must point to the real public URL of the backend, for example `https://api-grupo-01.seudominio.com/api`.
+Em deploy com dominio/reverse proxy, `NEXT_PUBLIC_API_URL` deve apontar para a URL publica real do backend, por exemplo `https://api-grupo-01.seudominio.com/api`.
 
-## Notes for Students
+## Observacoes Para Alunos
 
-- Do not commit `.env` files.
-- Do not commit `node_modules`, `.next`, or build files.
-- Keep the backend in JavaScript.
-- Install Tailwind or Bootstrap only if the project needs it.
+- Nao versionar arquivos `.env`.
+- Nao versionar `node_modules`, `.next` ou arquivos de build.
+- Manter o backend em JavaScript.
+- Instalar Tailwind ou Bootstrap apenas se o projeto precisar.
